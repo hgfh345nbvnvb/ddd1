@@ -360,6 +360,10 @@ glow.data.energy = 4000
 glow.data.keyframe_insert("energy", frame=f_go + 6)
 min108 = kit.hud_text(hud, "Min108", "108 MIN", (0, 0.55, 0), 0.26, kit.emit("Min108m", CREAM, 2.4))
 kit.vis(min108, W(5, "108"), B[6]["fs"], pop=8)
+plate108 = s3d.box("Plate108", (1.25, 0.36, 0.01), (0, 0, 0), kit.emit("Plate108m", (0.35, 0.03, 0.02), 1.0), bevel=0.004)
+plate108.parent = hud
+plate108.location = (0, 0.55, -0.01)
+kit.vis(plate108, W(5, "108"), B[6]["fs"], pop=8)
 s3d.tag("12 April 1961", (X - 1.6, 2.6, 1.9), W(5, "1961"), hold=60, size=0.14)
 kit.light("Sun5", "AREA", (X + 8, -2, 8), 3500, (1, 0.82, 0.6), size=6, target=(X, 4, 3))
 
