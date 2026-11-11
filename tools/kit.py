@@ -45,6 +45,12 @@ def setup(beats, fps=24, hdri="studio_small_09", tail=14, cam_bg=(0.02, 0.02, 0.
     for o in sc.objects:
         if o.type == "LIGHT" and o.data.type == "SUN":
             o.data.energy = sun
+            if os.environ.get("S3D_FAST", "1") == "1":
+                o.data.use_shadow = False   # every zone has its own shadow-casting key light
+    if os.environ.get("S3D_FAST", "1") == "1":
+        for a, v in (("shadow_ray_count", 1), ("shadow_step_count", 4), ("shadow_resolution_scale", 0.5)):
+            if hasattr(ee, a):
+                setattr(ee, a, v)
     _camera_sees(cam_bg)
     return sc
 
@@ -116,6 +122,8 @@ def light(name, kind, loc, energy, color=(1, 1, 1), size=1.0, target=None, cutof
     if hasattr(ld, "use_custom_distance"):
         ld.use_custom_distance = True   # lights only cost inside their own zone
         ld.cutoff_distance = cutoff
+    if os.environ.get("S3D_FAST", "1") == "1" and kind in ("AREA", "POINT") and energy < 200:
+        ld.use_shadow = False           # fills don't need shadow maps
     ob = link(bpy.data.objects.new(name, ld))
     ob.location = loc
     if target is not None:
@@ -292,6 +300,7 @@ class Cam:
         self.o = link(bpy.data.objects.new("Cam", cd))
         bpy.context.scene.camera = self.o
         self._prev = None
+        self.shots = []
 
     def _set(self, f, eye, look):
         self.o.location = eye
@@ -307,13 +316,48 @@ class Cam:
         """Hold a framing from f0 to f1-1, drifting to eye1/look1; the next shot starts with a hard cut."""
         self._set(f0, eye0, look0)
         self._set(f1 - 1, eye1 or eye0, look1 or look0)
+        self.shots.append((f0, f1, round(eye0[0] / ZONE)))
 
     def finish(self):
         linear(self.o)
+        if os.environ.get("S3D_NOCULL") != "1":
+            cull_zones(self)
 
     def hud(self, d=3.0):
         """Empty d metres in front of the lens; at lens 35 the frame spans x ±0.289·d, y ±0.514·d."""
         return empty("HUD", (0, 0, -d), self.o)
+
+
+ZONE = 100.0
+
+
+def cull_zones(cam):
+    """Hide every zone the camera is not in: EEVEE otherwise updates all lights and shadow maps every frame.
+    Objects that already animate hide_render themselves (hide_until, tags) are left alone."""
+    bpy.context.view_layer.update()
+    shots = sorted(cam.shots)
+    rig = set()
+    stack = [cam.o]
+    while stack:
+        o = stack.pop()
+        rig.add(o)
+        stack += list(o.children)
+    n = 0
+    for o in bpy.context.scene.objects:
+        if o in rig or o.type in ("EMPTY", "ARMATURE", "CAMERA"):
+            continue
+        if any(fc.data_path == "hide_render" for fc in s3d.fcurves(o)):
+            continue
+        z = round(o.matrix_world.translation.x / ZONE)
+        state = None
+        for f0, f1, zone in shots:
+            hide = zone != z
+            if hide != state:
+                o.hide_render = hide
+                o.keyframe_insert("hide_render", frame=1 if state is None else f0)
+                state = hide
+        n += 1
+    print(f"kit: zone culling on {n} objects over {len(shots)} shots")
 
 
 # ---------------------------------------------------------------- props

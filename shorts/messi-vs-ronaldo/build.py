@@ -444,6 +444,16 @@ if MODE == "preview":
         for tag_, f in (("a", b["fs"] + 6), ("b", b["fe"] - 4)):
             s3d.preview_still(os.path.join(WORK, "preview", f"b{i:02d}{tag_}_f{f:04d}.png"), frame=f, scale=30, samples=4)
     s3d.qa_gate(abort=False)
+elif MODE == "time":
+    import time
+    sc = bpy.context.scene
+    f0 = int(os.environ.get("S3D_FRAME", "30"))
+    for f in (f0, f0 + 1, f0 + 2):
+        sc.frame_set(f)
+        sc.render.filepath = f"/tmp/time_{f}.png"
+        t = time.time()
+        bpy.ops.render.render(write_still=True)
+        print("TIME", f, round(time.time() - t, 1), flush=True)
 elif MODE == "draft":
     sc = bpy.context.scene
     sc.render.engine = "BLENDER_WORKBENCH"
