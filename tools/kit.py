@@ -220,6 +220,18 @@ def hud_text(hud, name, body, loc, size, mat, align="CENTER"):
     return text(name, body, loc, size, mat, align=align, rot=(0, 0, 0), parent=hud)
 
 
+def hud_tag(hud, name, body, y, f0, f1, size=0.075):
+    """Screen-fixed label on a dark emissive plate: stays readable in b/w and never overlaps the action."""
+    plate = s3d.box(name + "_plate", (len(body) * size * 0.66 + size * 1.4, size * 1.9, 0.01), (0, 0, 0),
+                    emit(name + "_pm", (0.02, 0.025, 0.05), 1.0), bevel=0.004)
+    plate.parent = hud
+    plate.location = (0, y, -0.01)
+    t = hud_text(hud, name, body, (0, y, 0), size, emit(name + "_tm", (1, 1, 1), 2.2))
+    for o in (plate, t):
+        vis(o, f0, f1, pop=5)
+    return t
+
+
 # ---------------------------------------------------------------- timing / visibility
 def vis(o, f0, f1=None, pop=6, over=1.25):
     """Scale 0 outside [f0, f1); pops in at f0 (pop=0: hard cut)."""
@@ -483,6 +495,13 @@ def silhouette(h, mat):
     for p in h.parts:
         for sl in p.material_slots:
             sl.material = mat
+    return h
+
+
+def shrink(h, s):
+    """Scale a human.Human built at scale 1. Human(scale=...) only scales the bones: _part() restores each
+    body part's world matrix after parenting, so parts stay full size and limbs pivot in the wrong place."""
+    h.arm.scale = (s, s, s)
     return h
 
 

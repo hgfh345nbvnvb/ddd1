@@ -105,7 +105,7 @@ for cm in range(30, 200, 10):
     s3d.box(f"Tick{cm}", (0.22 if cm % 50 == 0 else 0.1, 0.01, 0.008), (X - 0.67 + (0.06 if cm % 50 else 0.0), 3.26, cm / 100), INK, bevel=0)
     if cm % 20 == 0:
         kit.text(f"TickL{cm}", str(cm), (X - 0.41, 3.255, cm / 100), 0.055, INK)
-kid = human.Human("Kid", loc=(X - 0.1, 2.95, 0.0), facing=0, outfit=MESSI_KIT, seed=2, scale=0.62)
+kid = kit.shrink(human.Human("Kid", loc=(X - 0.1, 2.95, 0.0), facing=0, outfit=MESSI_KIT, seed=2), 0.62)
 kit.football("Ball1", 0.11, (X + 0.3, 2.7, 0.11))
 TX = X + 0.75
 s3d.box("Table1", (0.6, 0.4, 0.04), (TX, 2.85, 0.75), s3d.mat("TableTop", (0.6, 0.6, 0.6), rough=0.4))
@@ -119,8 +119,8 @@ for k, dx in enumerate((-0.18, -0.08, 0.02)):
     s3d.pop_in(v, W(1, "pay") + k * 3, dur=8, sfx="pop" if k == 0 else None)
 syr = s3d.cylinder("Syringe", 0.012, 0.16, (TX + 0.17, 2.82, 0.785), rot=(0, math.pi / 2, 0.3), mat=glass, verts=12)
 s3d.pop_in(syr, f_treat, dur=8, sfx=None)
-s3d.tag("growth hormone deficiency", (X + 0.1, 2.5, 1.62), W(1, "deficiency"), hold=58, size=0.075)
-s3d.tag("Barcelona pays", (TX, 2.6, 1.15), W(1, "Barcelona"), hold=50, size=0.075)
+kit.hud_tag(hud, "TagGHD", "growth hormone deficiency", 0.76, W(1, "deficiency"), W(1, "Barcelona", -2))
+kit.hud_tag(hud, "TagPays", "Barcelona pays for treatment", 0.76, W(1, "Barcelona"), B[2]["fs"] - 3)
 kid.pose_at(W(1, "diagnosed"), "stand"); kid.pose_at(W(1, "diagnosed") + 8, "think"); kid.hold(W(1, "diagnosed") + 8, f_treat)
 kid.pose_at(f_treat + 6, "thumbs_up"); kid.hold(f_treat + 6, B[2]["fs"])
 kit.light("Key1", "AREA", (X - 1.5, -1, 3), 260, (1, 0.96, 0.9), size=3, target=(X, 3, 1))

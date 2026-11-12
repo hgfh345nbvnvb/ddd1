@@ -2,6 +2,7 @@ name: render-shorts
 
 # Renders the remaining frames of both shorts in parallel slices on GitHub-hosted runners
 # (the thread sandbox has 2 CPUs and only renders while a session is active).
+# The matrix lists only the slices still needed (Messi 1-404 and 1281-1426 come from earlier renders).
 # Each slice uploads a near-lossless video chunk; assembly happens in the workspace.
 on:
   push:
@@ -64,26 +65,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { p: messi-vs-ronaldo, s: 259, e: 404 }
-          - { p: messi-vs-ronaldo, s: 405, e: 550 }
-          - { p: messi-vs-ronaldo, s: 551, e: 696 }
-          - { p: messi-vs-ronaldo, s: 697, e: 842 }
-          - { p: messi-vs-ronaldo, s: 843, e: 988 }
-          - { p: messi-vs-ronaldo, s: 989, e: 1134 }
-          - { p: messi-vs-ronaldo, s: 1135, e: 1280 }
-          - { p: messi-vs-ronaldo, s: 1281, e: 1426 }
+          - { p: messi-vs-ronaldo, s: 405, e: 623 }
+          - { p: messi-vs-ronaldo, s: 624, e: 842 }
+          - { p: messi-vs-ronaldo, s: 843, e: 1061 }
+          - { p: messi-vs-ronaldo, s: 1062, e: 1280 }
           - { p: messi-vs-ronaldo, s: 1427, e: 1572 }
-          - { p: gagarin-7-facts, s: 1, e: 122 }
-          - { p: gagarin-7-facts, s: 123, e: 244 }
-          - { p: gagarin-7-facts, s: 245, e: 366 }
-          - { p: gagarin-7-facts, s: 367, e: 488 }
-          - { p: gagarin-7-facts, s: 489, e: 610 }
-          - { p: gagarin-7-facts, s: 611, e: 732 }
-          - { p: gagarin-7-facts, s: 733, e: 854 }
-          - { p: gagarin-7-facts, s: 855, e: 976 }
-          - { p: gagarin-7-facts, s: 977, e: 1098 }
-          - { p: gagarin-7-facts, s: 1099, e: 1220 }
-          - { p: gagarin-7-facts, s: 1221, e: 1342 }
+          - { p: gagarin-7-facts, s: 1, e: 269 }
+          - { p: gagarin-7-facts, s: 270, e: 538 }
+          - { p: gagarin-7-facts, s: 539, e: 806 }
+          - { p: gagarin-7-facts, s: 807, e: 1074 }
+          - { p: gagarin-7-facts, s: 1075, e: 1342 }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache/restore@v4
