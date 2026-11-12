@@ -18,7 +18,12 @@ def main():
     ap.add_argument("--fps", type=int, default=24)
     a = ap.parse_args()
     beats = json.load(open(os.path.join(a.work, "beats.json")))
-    span = lambda i: (beats[i]["fs"] - 1) / a.fps, ((beats[i + 1]["fs"] - 1) / a.fps if i + 1 < len(beats) else 1e4)  # noqa: E731
+
+    def span(i):
+        s = (beats[i]["fs"] - 1) / a.fps
+        e = (beats[i + 1]["fs"] - 1) / a.fps if i + 1 < len(beats) else 1e4
+        return s, e
+
     vf = []
     if a.warm:   # warm Soviet print: lifted reds/yellows, slightly muted, a touch of contrast
         vf.append("colorbalance=rs=0.05:gs=0.01:bs=-0.07:rm=0.04:gm=0.0:bm=-0.05:rh=0.02:bh=-0.03,eq=saturation=0.88:contrast=1.04")
