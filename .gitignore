@@ -3,7 +3,6 @@ shorts/*/preview/
 shorts/*/voice_24k.wav
 shorts/*/*.log
 shorts/*/sfx/
-shorts/*/render.mp4
-shorts/*/graded.mp4
-shorts/*/draft.mp4
+shorts/*/*.mp4
+shorts/*/qa_sheet.jpg
 __pycache__/

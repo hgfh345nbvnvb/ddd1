@@ -1,0 +1,69 @@
+[
+ {
+  "sfx": "pop",
+  "frame": 512,
+  "t": 21.333,
+  "prompt": "soft brass stinger"
+ },
+ {
+  "sfx": "thud",
+  "frame": 626,
+  "t": 26.083,
+  "prompt": "old bus brakes squeal and stop"
+ },
+ {
+  "sfx": "step",
+  "frame": 642,
+  "t": 26.75,
+  "gain": -6
+ },
+ {
+  "sfx": "step",
+  "frame": 670,
+  "t": 27.917,
+  "gain": -6
+ },
+ {
+  "sfx": "whoosh",
+  "frame": 739,
+  "t": 30.792,
+  "prompt": "rocket engines ignite and roar",
+  "seconds": 4
+ },
+ {
+  "sfx": "thud",
+  "frame": 884,
+  "t": 36.833,
+  "prompt": "rubber stamp slammed on paper"
+ },
+ {
+  "sfx": "whoosh",
+  "frame": 996,
+  "t": 41.5,
+  "prompt": "ejection seat bang and rush of wind"
+ },
+ {
+  "sfx": "step",
+  "frame": 1102,
+  "t": 45.917,
+  "gain": -6
+ },
+ {
+  "sfx": "step",
+  "frame": 1130,
+  "t": 47.083,
+  "gain": -6
+ },
+ {
+  "sfx": "step",
+  "frame": 1158,
+  "t": 48.25,
+  "gain": -6
+ },
+ {
+  "sfx": "step",
+  "frame": 1186,
+  "t": 49.417,
+  "gain": -6
+ }
+]
