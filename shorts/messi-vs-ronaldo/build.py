@@ -454,6 +454,9 @@ elif MODE == "time":
         t = time.time()
         bpy.ops.render.render(write_still=True)
         print("TIME", f, round(time.time() - t, 1), flush=True)
+elif MODE == "build":   # scene only: warms the asset cache, writes the sound cues
+    s3d.qa_gate(abort=False)
+    s3d.export_markers(os.path.join(WORK, "render.sfx.json"))
 elif MODE == "draft":
     sc = bpy.context.scene
     sc.render.engine = "BLENDER_WORKBENCH"

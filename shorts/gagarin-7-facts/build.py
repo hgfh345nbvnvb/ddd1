@@ -485,6 +485,9 @@ if MODE == "preview":
     for f in frames:
         s3d.preview_still(os.path.join(WORK, "preview", f"f{f:04d}.png"), frame=f, scale=30, samples=4)
     s3d.qa_gate(abort=False)
+elif MODE == "build":   # scene only: warms the asset cache, writes the sound cues
+    s3d.qa_gate(abort=False)
+    s3d.export_markers(os.path.join(WORK, "render.sfx.json"))
 elif MODE == "draft":
     sc = bpy.context.scene
     sc.render.engine = "BLENDER_WORKBENCH"

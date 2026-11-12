@@ -270,9 +270,14 @@ def linear(o):
 
 
 def render_frames(work, scale=100):
-    """Final render as a PNG sequence: resumable (existing frames are skipped) and patchable per range."""
+    """Final render as a PNG sequence: resumable (existing frames are skipped) and patchable per range.
+    S3D_START / S3D_END limit the render to a slice of frames (parallel CI jobs)."""
     s3d.qa_gate()
     sc = bpy.context.scene
+    if os.environ.get("S3D_START"):
+        sc.frame_start = int(os.environ["S3D_START"])
+    if os.environ.get("S3D_END"):
+        sc.frame_end = int(os.environ["S3D_END"])
     sc.render.resolution_percentage = scale
     s3d.export_markers(os.path.join(work, "render.sfx.json"))
     st = sc.render.image_settings
